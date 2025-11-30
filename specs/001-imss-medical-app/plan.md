@@ -261,14 +261,14 @@ No constitution violations requiring justification. Plan follows all core princi
 
 ### Research Tasks (to be generated in research.md)
 
-1. **Triage Algorithm Research**: Five-question assessment structure for medical urgency classification (low/mid/high); comparison with existing IMSS protocols or international standards (e.g., triage protocols)
+1. **Triage Algorithm Research**: Five-question assessment structure for medical urgency classification (low/mid/high); comparison with existing IMSS protocols or international standards (e.g., triage protocols); validation method against doctor-assigned urgency levels
 2. **Spanish Localization Library**: i18n-js alternatives; best practices for medical terminology in Spanish; date/time/currency formatting libraries
 3. **CURP Validation**: CURP format specifications; IMSS API integration options; offline validation rules
 4. **Appointment Scheduling Algorithm**: Optimization for assigning slots based on urgency (high: 24h, mid: 72h, low: 1-2w); conflict avoidance; load balancing across doctors
-5. **Performance & Scaling**: Redis caching strategy for appointment slots; load testing tools; horizontal scaling approach for 500 concurrent users
-6. **Healthcare Compliance**: WCAG 2.1 AA guidelines for medical web apps; Mexican healthcare privacy regulations (LGPD equivalent); IMSS data protection standards
-7. **Email Service Integration**: Spanish email templates; transactional email providers (SendGrid, AWS SES); delivery timing for appointment confirmations
-8. **Authentication & Security**: JWT best practices; CURP as unique identifier; password hashing strategy; HTTPS/TLS requirements
+5. **Performance & Scaling - Redis Caching**: Redis caching strategy specifically for appointment slot lookup optimization to achieve <1s lookup time (per SC-005); load testing tools; horizontal scaling approach for 500 concurrent users; cache invalidation strategy
+6. **Healthcare Compliance & Privacy**: WCAG 2.1 AA guidelines for medical web apps; Mexican LGPD healthcare privacy regulations; IMSS data protection standards; GDPR applicability assessment
+7. **Email Service Integration & Logging Strategy**: Spanish email templates; transactional email providers (SendGrid, AWS SES) with 2-minute delivery SLA validation; structured JSON logging approach with CURP masking (first 6 chars), audit trail for medical data access, error context requirements
+8. **Authentication & Security**: JWT best practices including token expiry (24 hours), refresh token strategy, token rotation security; CURP as unique identifier; password hashing (bcrypt) strategy; HTTPS/TLS requirements; CORS configuration
 
 ## Phase 1: Design Artifacts Required
 
@@ -282,11 +282,11 @@ No constitution violations requiring justification. Plan follows all core princi
 - SickLeaveRequest entity: ID, user_id FK, doctor_id FK, reason, start_date, end_date, status (enum: PENDING/APPROVED/DENIED), certificate_path, created_at
 
 ### API Contracts (contracts/)
-- **Auth API** (auth.openapi.yaml): POST /register, POST /login, POST /logout, POST /password-reset
-- **Appointments API** (appointments.openapi.yaml): GET /appointments, POST /appointments, PUT /appointments/:id, GET /appointments/:id, GET /appointments/history
+- **Auth API** (auth.openapi.yaml): POST /register, POST /login, POST /logout, POST /password-reset; must specify JWT token expiry (24 hours), refresh token strategy, HTTPS requirement, CORS configuration
+- **Appointments API** (appointments.openapi.yaml): GET /appointments, POST /appointments, PUT /appointments/:id, GET /appointments/:id, GET /appointments/history; include emergency escalation endpoint (POST /appointments/emergency-escalate)
 - **Doctors API** (doctors.openapi.yaml): GET /doctors, GET /doctors/:id, GET /doctors/search (filter by specialty)
-- **Triage API** (triage.openapi.yaml): POST /triage/assess (5-question questionnaire)
-- **Requests API** (requests.openapi.yaml): POST /medicine-requests, PUT /medicine-requests/:id, POST /sick-leave-requests, PUT /sick-leave-requests/:id
+- **Triage API** (triage.openapi.yaml): POST /triage/assess (5-question questionnaire); must include urgency classification response schema (LOW/MID/HIGH) with validation accuracy target (95%)
+- **Requests API** (requests.openapi.yaml): POST /medicine-requests, PUT /medicine-requests/:id, POST /sick-leave-requests, PUT /sick-leave-requests/:id; note: SMS support deferred to Phase 2B
 
 ### Quickstart Guide (quickstart.md)
 - Prerequisites: Node.js 18+, PostgreSQL 14+, npm
@@ -320,12 +320,13 @@ This will update the agent-specific context file with:
 This plan stops after Phase 1 design. Phase 2 (implementation) tasks will be created via `/speckit.tasks` command and will include:
 
 ### Backend Implementation Tasks
-- User authentication service (registration with CURP, JWT, password reset)
-- Appointment management service (CRUD, filtering, persistence)
-- Triage assessment service (5-question algorithm, urgency classification)
-- Automatic scheduling service (slot assignment based on urgency)
-- Doctor directory service (CRUD, filtering, availability)
+- User authentication service (registration with CURP, JWT with 24h expiry + refresh token strategy, password reset, HTTPS/CORS middleware)
+- Appointment management service (CRUD, filtering, persistence, emergency escalation detection)
+- Triage assessment service (5-question algorithm, urgency classification with 95% accuracy validation)
+- Automatic scheduling service (slot assignment based on urgency with SC-004 validation)
+- Doctor directory service (CRUD, filtering, availability, ratings calculation)
 - Medicine & sick leave request workflows
+- Emergency escalation workflow (urgency threshold + 911 routing + on-call notification) - Phase 2B priority
 
 ### Frontend Implementation Tasks
 - Spanish UI components (registration, login, dashboard)

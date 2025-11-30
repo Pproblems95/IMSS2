@@ -179,7 +179,7 @@ Users should be able to request medical sick leave documentation through the sys
 - How does system handle double-booking when multiple urgent patients arrive simultaneously? System applies first-come-first-served for automatic assignments; manual overrides available for emergency cases.
 - What happens if a doctor becomes unavailable after an appointment is booked? System notifies patient and offers alternative available doctors with similar specialty or different dates.
 - How does system handle urgent cases that arrive outside business hours? High-urgency cases outside 08:00-18:00 are flagged for on-call emergency team; patient receives callback within 30 minutes.
-- What happens if urgency assessment indicates emergency-level case (trauma, chest pain)? Emergency cases are escalated to immediate emergency department with phone call to patient; system routes to 911 dispatch protocols.
+- What happens if urgency assessment indicates emergency-level case (trauma, chest pain)? Emergency cases are escalated to immediate emergency department with phone call to patient; system routes to 911 dispatch protocols. **Implementation**: Phase 2B task to add emergency escalation endpoint with urgency threshold detection (High+emergency symptoms → immediate 911 routing + on-call notification).
 
 ---
 
@@ -200,7 +200,7 @@ Users should be able to request medical sick leave documentation through the sys
 - **FR-008**: System MUST allow users to filter appointments by date range, doctor, or specialty
 - **FR-009**: System MUST persist booked appointments and prevent double-booking of same slot
 - **FR-010**: System MUST generate appointment confirmation with unique reference number
-- **FR-011**: System MUST send confirmation email/SMS to user after successful booking
+- **FR-011**: System MUST send confirmation email to user after successful booking (SMS support deferred to Phase 2B)
 
 **Urgency Triage**
 - **FR-012**: System MUST present exactly five triage assessment questions covering medical urgency indicators
@@ -273,7 +273,7 @@ Users should be able to request medical sick leave documentation through the sys
 - **SC-001**: Users can complete account registration and login in under 2 minutes
 - **SC-002**: Users can book an appointment from login to confirmation in under 3 minutes
 - **SC-003**: System accurately classifies urgency level for 95% of triage assessments (validated against doctor review)
-- **SC-004**: High-urgency appointments are scheduled within 24 hours 90% of the time
+- **SC-004**: High-urgency appointments are scheduled within 24 hours 90% of the time (testable in Phase 2B after automatic assignment implementation; Phase 2A includes manual validation via T051)
 - **SC-005**: System handles 500 concurrent users without performance degradation (page load <2 seconds)
 - **SC-006**: Doctor receives medicine/sick leave requests within 1 second of user submission
 - **SC-007**: 90% of first-time users successfully complete appointment booking without support assistance
