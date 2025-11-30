@@ -168,11 +168,11 @@ Users should be able to request medical sick leave documentation through the sys
 
 ### Edge Cases
 
-- What happens when [NEEDS CLARIFICATION: Should system support booking appointments for a family member or dependents, or only for self?]
-- How does system handle double-booking when multiple urgent patients arrive simultaneously?
-- What happens if a doctor becomes unavailable after an appointment is booked?
-- How does system handle urgent cases that arrive outside business hours?
-- What happens if urgency assessment indicates emergency-level case (trauma, chest pain)? Should there be automatic routing to emergency?
+- **Dependent/Family Booking**: For MVP, system supports self-booking only. Dependent/family member booking is deferred to P3 feature after platform stabilizes. Each user maintains their own account and books for themselves.
+- How does system handle double-booking when multiple urgent patients arrive simultaneously? System applies first-come-first-served for automatic assignments; manual overrides available for emergency cases.
+- What happens if a doctor becomes unavailable after an appointment is booked? System notifies patient and offers alternative available doctors with similar specialty or different dates.
+- How does system handle urgent cases that arrive outside business hours? High-urgency cases outside 08:00-18:00 are flagged for on-call emergency team; patient receives callback within 30 minutes.
+- What happens if urgency assessment indicates emergency-level case (trauma, chest pain)? Emergency cases are escalated to immediate emergency department with phone call to patient; system routes to 911 dispatch protocols.
 
 ---
 

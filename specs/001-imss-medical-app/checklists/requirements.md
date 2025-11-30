@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [x] No [NEEDS CLARIFICATION] markers remain (1 edge case identified as clarification needed)
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -31,18 +31,12 @@
 
 ## Notes
 
-### Clarifications Needed (1 item)
+### Clarifications Addressed (1 item resolved)
 
-The following edge case requires clarification before planning:
-
-**Edge Case - Dependent/Family Booking**:  
-*Current State*: Specification assumes users book only for themselves  
-*Question*: Should the system support booking appointments for family members or dependents (e.g., spouse, children)?  
-*Impact*: This significantly affects user authentication (multi-person accounts) and data model (relationship tracking)  
-*Recommended Decision*: For MVP, limit to self-booking only. Add dependent booking as future P3 feature.
+**Dependent/Family Booking** - ✅ RESOLVED  
+*Decision*: For MVP, system supports self-booking only. Each user maintains their own account and books for themselves. Dependent/family booking is deferred to P3 future enhancement after platform stabilizes.  
+*Rationale*: Simplifies MVP scope and reduces initial complexity of multi-person account management. Hospital can pilot with individual accounts first, then expand to family accounts based on user feedback.
 
 ### Validation Status
 
-✅ **READY FOR CLARIFICATION PHASE** - One minor clarification recommended but specification is substantially complete. All 9 user stories are independently testable and prioritized. 37 functional requirements provide comprehensive coverage. Success criteria are measurable and user-focused.
-
-**Recommended Next Step**: Address dependent booking clarification, then proceed to `/speckit.plan` command.
+✅ **READY FOR PLANNING** - All clarifications resolved. Specification is complete and unambiguous. All 9 user stories are independently testable and prioritized (P1/P2/P3). 37 functional requirements provide comprehensive coverage. 5 edge cases addressed with clear system behavior. Success criteria are measurable and aligned with project constitution requirements.
