@@ -31,12 +31,24 @@
 
 ## Notes
 
-### Clarifications Addressed (1 item resolved)
+### Clarifications Addressed (2 items resolved)
 
-**Dependent/Family Booking** - ✅ RESOLVED  
-*Decision*: For MVP, system supports self-booking only. Each user maintains their own account and books for themselves. Dependent/family booking is deferred to P3 future enhancement after platform stabilizes.  
-*Rationale*: Simplifies MVP scope and reduces initial complexity of multi-person account management. Hospital can pilot with individual accounts first, then expand to family accounts based on user feedback.
+**1. User Interface Language** - ✅ RESOLVED  
+*Decision*: All user-facing text, labels, buttons, error messages, and notifications will be displayed in Spanish (Español).  
+*Implementation*: Added 5 non-functional requirements (NFR-001 through NFR-005) specifying Spanish-only interface, Spanish email communications, and Mexican date/time formatting.
+
+**2. Registration Identifier Field** - ✅ RESOLVED  
+*Decision*: Use CURP (18-character Mexican national ID) instead of generic personal ID for registration and medical data management.  
+*Rationale*: CURP is the standard Mexican national identifier used in healthcare systems, reducing data friction and improving medical record relevance. CURP is more specific and validated than generic personal ID.  
+*Implementation*: Updated FR-001 and FR-002 to specify CURP validation (exactly 18 alphanumeric characters), updated User entity to store CURP, updated all acceptance scenarios in User Story 1 to reference CURP, added 2 data security requirements (NFR-006 and NFR-007) for CURP validation and encryption.
 
 ### Validation Status
 
-✅ **READY FOR PLANNING** - All clarifications resolved. Specification is complete and unambiguous. All 9 user stories are independently testable and prioritized (P1/P2/P3). 37 functional requirements provide comprehensive coverage. 5 edge cases addressed with clear system behavior. Success criteria are measurable and aligned with project constitution requirements.
+✅ **READY FOR PLANNING** - All 2 clarifications resolved and integrated. Specification now includes:
+- Spanish-only user interface (5 localization requirements added)
+- CURP-based registration with proper validation (FR-001, FR-002, NFR-006)
+- Updated acceptance scenarios reflecting CURP and Spanish UI
+- 8 new non-functional requirements for localization and data security
+- Enhanced assumptions addressing CURP and Spanish language requirements
+
+Total: 9 user stories, 39 functional requirements (FR-001 through FR-037 + 2 Spanish UI requirements), 8 non-functional requirements, all independently testable.

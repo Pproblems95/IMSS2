@@ -5,6 +5,13 @@
 **Status**: Draft  
 **Input**: Create IMSS medical web application with appointment booking, urgency triage, doctor management, medicine requests, and sick leave functionality
 
+## Clarifications
+
+### Session 2025-11-29
+
+- Q: What language should the user interface be? → A: Spanish (all user-facing text and labels)
+- Q: Should registration use generic personal ID or country-specific identifier? → A: CURP (18-character Mexican national ID) for medical data relevance and reduced friction
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Account Creation and Authentication (Priority: P1)
@@ -17,11 +24,11 @@ Users need to create a personal account to access the IMSS medical web applicati
 
 **Acceptance Scenarios**:
 
-1. **Given** a new user visits the application, **When** they click "Create Account", **Then** they see a registration form requiring name, email, phone, password, and personal ID
-2. **Given** a user completes the registration form with valid data, **When** they submit, **Then** the account is created and they receive a confirmation email
-3. **Given** a registered user has valid credentials, **When** they log in, **Then** they access their dashboard
-4. **Given** a user enters incorrect credentials, **When** they attempt login, **Then** they see a clear error message and login fails
-5. **Given** a logged-in user, **When** they log out, **Then** they are redirected to the login page and cannot access protected areas
+1. **Given** a new user visits the application, **When** they click "Crear Cuenta", **Then** they see a registration form in Spanish requiring name, email, phone, password, and CURP (18-character Mexican national ID)
+2. **Given** a user completes the registration form with valid CURP (exactly 18 alphanumeric characters), **When** they submit, **Then** the account is created and they receive a confirmation email in Spanish
+3. **Given** a registered user has valid credentials, **When** they log in, **Then** they access their dashboard with all interface text in Spanish
+4. **Given** a user enters incorrect credentials, **When** they attempt login, **Then** they see a clear error message in Spanish and login fails
+5. **Given** a logged-in user, **When** they log out, **Then** they are redirected to the Spanish-language login page and cannot access protected areas
 
 ---
 
@@ -181,8 +188,8 @@ Users should be able to request medical sick leave documentation through the sys
 ### Functional Requirements
 
 **Account & Authentication**
-- **FR-001**: System MUST allow new users to register with email, password, personal ID, name, and phone number
-- **FR-002**: System MUST validate email format and personal ID format per IMSS standards
+- **FR-001**: System MUST allow new users to register with email, password, CURP (18-character Mexican national ID), name, and phone number
+- **FR-002**: System MUST validate email format and CURP format (exactly 18 alphanumeric characters) per IMSS standards
 - **FR-003**: System MUST enforce password security requirements (minimum 8 characters, mix of letters/numbers)
 - **FR-004**: System MUST support user login with email and password
 - **FR-005**: System MUST provide password reset functionality via email verification
@@ -233,9 +240,23 @@ Users should be able to request medical sick leave documentation through the sys
 - **FR-036**: System MUST generate official sick leave certificate for approved requests with IMSS header
 - **FR-037**: System MUST include sick leave start date, end date, and IMSS provider information on certificate
 
+### Non-Functional Requirements
+
+**Localization & Internationalization**
+- **NFR-001**: All user-facing text, labels, buttons, error messages, and notifications MUST be displayed in Spanish (Español)
+- **NFR-002**: All email communications (confirmations, notifications, alerts) MUST be sent in Spanish
+- **NFR-003**: Date and time formatting MUST follow Mexican conventions (DD/MM/YYYY, 24-hour time)
+- **NFR-004**: Currency displays (if any) MUST show Mexican Peso (MXN) symbol
+- **NFR-005**: System MUST support Spanish-language validation messages and error descriptions
+
+**Data & Security**
+- **NFR-006**: CURP validation MUST conform to 18-character Mexican national ID format (alphanumeric)
+- **NFR-007**: All user data MUST be encrypted at rest per IMSS security standards
+- **NFR-008**: Medical data MUST comply with Mexican healthcare privacy regulations
+
 ### Key Entities
 
-- **User**: Represents a patient using the IMSS system. Attributes: ID, email, password hash, personal ID, name, phone, assigned doctor, created date, preferences
+- **User**: Represents a patient using the IMSS system. Attributes: ID, email, password hash, CURP (18-character Mexican national ID), name, phone, assigned doctor, created date, preferences
 - **Doctor**: Represents healthcare provider in IMSS system. Attributes: ID, name, specialty, qualifications, years of experience, available hours, current patient load, ratings
 - **Appointment**: Represents scheduled medical consultation. Attributes: ID, user ID, doctor ID, scheduled date/time, urgency level, reason, status (booked/completed/cancelled), clinical notes
 - **Urgency Assessment**: Represents triage evaluation. Attributes: ID, appointment ID, five question responses, calculated urgency level (Low/Mid/High), timestamp
@@ -274,11 +295,14 @@ Users should be able to request medical sick leave documentation through the sys
 
 ## Assumptions
 
-- Users have valid personal ID documents required by IMSS
+- Users have valid CURP (18-character Mexican national ID) documents as required by IMSS
+- All users are Mexican residents or have valid CURP documentation
 - Hospital staff has already set up doctor accounts and availability schedules in backend system
-- Email service is available for sending confirmations and notifications
-- IMSS has a centralized database or API for personal ID validation
+- Email service is available for sending confirmations and notifications in Spanish
+- IMSS has a centralized database or API for CURP validation
+- Spanish language library/framework support is available for the selected tech stack
 - Mobile browser access is sufficient (no native mobile app required for MVP)
 - Hospital operates Monday-Friday 08:00-18:00 with emergency capacity outside these hours
 - System deployment target is cloud infrastructure with auto-scaling capability
+- Users are comfortable using Spanish-language interfaces (no language preference settings for MVP)
 
