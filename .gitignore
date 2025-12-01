@@ -1,0 +1,73 @@
+# Node / JavaScript
+node_modules/
+dist/
+build/
+coverage/
+*.log
+.env
+.env.*
+
+# TypeScript
+*.tsbuildinfo
+
+# VSCode and IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend
+frontend/dist/
+frontend/build/
+frontend/.env
+
+# Backend
+backend/dist/
+backend/build/
+backend/.env
+
+# Docker
+docker-compose.override.yml
+
+# Python cache (if any)
+__pycache__/
+*.pyc
+
+# Terraform
+.terraform/
+*.tfstate*
+*.tfvars
+
+# Misc
+*.tmp
+*.bak
+
+# Secrets
+secrets/
+*.key
+*.crt
+
+# Local envs
+.vagrant/
+.local/
+
+# Lockfiles if using alternative package managers
+# (keep package-lock.json in repo; ignore others if not used)
+pnpm-lock.yaml
+
+# Generated OpenAPI/Swagger
+specs/**/contracts/*.yaml
+
+# Test artifacts
+reports/
+

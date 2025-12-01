@@ -1,0 +1,11 @@
+# Docker ignore
+node_modules
+.git
+Dockerfile*
+docker-compose.yml
+*.log
+.env
+coverage
+frontend/dist
+backend/dist
+**/node_modules

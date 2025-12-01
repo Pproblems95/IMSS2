@@ -1,0 +1,10 @@
+# Prettier ignore patterns
+node_modules/
+dist/
+build/
+coverage/
+frontend/dist/
+backend/dist/
+.specs/
+.specify/
+.env
