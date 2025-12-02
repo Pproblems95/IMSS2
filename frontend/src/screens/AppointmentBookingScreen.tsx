@@ -12,11 +12,11 @@ interface TriageQuestion {
 }
 
 const TRIAGE_QUESTIONS: TriageQuestion[] = [
-  { id: 1, question: 'Tiene dolor?', hint: 'Seleccione el nivel de dolor que siente' },
-  { id: 2, question: 'Cuanto tiempo lleva con los sintomas?', hint: 'Seleccione la duracion' },
-  { id: 3, question: 'Con que frecuencia presenta los sintomas?', hint: 'Seleccione la frecuencia' },
-  { id: 4, question: 'Presenta sintomas de emergencia?', hint: 'Responda honestamente' },
-  { id: 5, question: 'Tiene fiebre o temperatura elevada?', hint: 'Seleccione la opcion que aplique' },
+  { id: 1, question: '¿Tiene dolor?', hint: 'Seleccione el nivel de dolor que siente' },
+  { id: 2, question: '¿Cuánto tiempo lleva con los síntomas?', hint: 'Seleccione la duración' },
+  { id: 3, question: '¿Con qué frecuencia presenta los síntomas?', hint: 'Seleccione la frecuencia' },
+  { id: 4, question: '¿Presenta síntomas de emergencia?', hint: 'Responda honestamente' },
+  { id: 5, question: '¿Tiene fiebre o temperatura elevada?', hint: 'Seleccione la opción que aplique' },
 ];
 
 const SPECIALTIES = ['Medicina General', 'Cardiologia', 'Pediatria', 'Ortopedia', 'Dermatologia'];
