@@ -31,14 +31,14 @@
 
 **Independent Test Criteria**: Each research task produces a documented decision and architectural pattern that can be validated against project requirements.
 
-- [ ] T001 Research triage algorithm standards with validation method `research.md` - 5-question assessment, IMSS protocol comparison, accuracy validation against doctor-assigned urgency (target: 95% per SC-003)
-- [ ] T002 [P] Evaluate Spanish localization libraries and Mexican formatting conventions `research.md` - i18n-js vs ngx-translate, date/time/currency formatting, medical terminology
-- [ ] T003 [P] Document CURP validation rules and IMSS integration options `research.md` - 18-character format, offline validation, potential API integration
-- [ ] T004 [P] Design appointment scheduling algorithm for urgency-based slot assignment `research.md` - High/Mid/Low urgency timing (24h/72h/1-2w), conflict avoidance logic, SC-004 validation strategy
-- [ ] T005 [P] Design Redis caching strategy for appointment slot lookup optimization `research.md` - Cache invalidation, <1s lookup performance target, load testing for 500 concurrent users, horizontal scaling approach
-- [ ] T006 [P] Research Mexican healthcare compliance and privacy requirements `research.md` - Mexican LGPD healthcare regulations, IMSS data protection standards, WCAG 2.1 AA accessibility guidelines, GDPR applicability
-- [ ] T007 [P] Establish structured logging and email service integration strategy `research.md` - JSON logging with CURP masking (first 6 chars), audit trail for medical data, SendGrid/AWS SES 2-minute SLA validation, Spanish email templates, error context requirements
-- [ ] T008 [P] Document JWT security and authentication best practices `research.md` - JWT token expiry (24 hours), refresh token strategy, token rotation, CURP as unique identifier, bcrypt configuration, HTTPS/TLS, CORS requirements
+- [X] T001 Research triage algorithm standards with validation method `research.md` - 5-question assessment, IMSS protocol comparison, accuracy validation against doctor-assigned urgency (target: 95% per SC-003)
+- [X] T002 [P] Evaluate Spanish localization libraries and Mexican formatting conventions `research.md` - i18n-js vs ngx-translate, date/time/currency formatting, medical terminology
+- [X] T003 [P] Document CURP validation rules and IMSS integration options `research.md` - 18-character format, offline validation, potential API integration
+- [X] T004 [P] Design appointment scheduling algorithm for urgency-based slot assignment `research.md` - High/Mid/Low urgency timing (24h/72h/1-2w), conflict avoidance logic, SC-004 validation strategy
+- [X] T005 [P] Design Redis caching strategy for appointment slot lookup optimization `research.md` - Cache invalidation, <1s lookup performance target, load testing for 500 concurrent users, horizontal scaling approach
+- [X] T006 [P] Research Mexican healthcare compliance and privacy requirements `research.md` - Mexican LGPD healthcare regulations, IMSS data protection standards, WCAG 2.1 AA accessibility guidelines, GDPR applicability
+- [X] T007 [P] Establish structured logging and email service integration strategy `research.md` - JSON logging with CURP masking (first 6 chars), audit trail for medical data, SendGrid/AWS SES 2-minute SLA validation, Spanish email templates, error context requirements
+- [X] T008 [P] Document JWT security and authentication best practices `research.md` - JWT token expiry (24 hours), refresh token strategy, token rotation, CURP as unique identifier, bcrypt configuration, HTTPS/TLS, CORS requirements
 
 ---
 
@@ -48,15 +48,15 @@
 
 **Independent Test Criteria**: Each design artifact can be validated against specification requirements before implementation begins. API contracts validated by backend team independently of frontend.
 
-- [ ] T009 Create data model documentation with PostgreSQL schema `data-model.md` - 7 entities (User, Doctor, Appointment, UrgencyAssessment, MedicineRequest, SickLeaveRequest, DoctorSchedule) with relationships, constraints, indexes
-- [ ] T010 [P] Generate Auth API contract (OpenAPI) `contracts/auth.openapi.yaml` - POST /register (CURP validation), POST /login, POST /logout, POST /password-reset with request/response schemas
-- [ ] T011 [P] Generate Appointments API contract (OpenAPI) `contracts/appointments.openapi.yaml` - GET/POST/PUT /appointments, filtering by date/doctor/specialty, history endpoint with schemas
-- [ ] T012 [P] Generate Doctors API contract (OpenAPI) `contracts/doctors.openapi.yaml` - GET /doctors (directory), GET /doctors/:id (profile), GET /doctors/search (filter by specialty) with availability schemas
-- [ ] T013 [P] Generate Triage API contract (OpenAPI) `contracts/triage.openapi.yaml` - POST /triage/assess with 5-question questionnaire, urgency classification response (LOW/MID/HIGH)
-- [ ] T014 [P] Generate Requests API contract (OpenAPI) `contracts/requests.openapi.yaml` - POST/PUT medicine requests, POST/PUT sick leave requests with approval workflow schemas
-- [ ] T015 Create quickstart guide for local development `quickstart.md` - Prerequisites (Node.js 18+, PostgreSQL 14+, npm), backend/frontend setup, test running, local workflow example
-- [ ] T016 Initialize backend project structure with TypeScript, Express, PostgreSQL connection `backend/src/config/`, `backend/package.json`, `backend/tsconfig.json` - Database migrations setup, connection pooling configuration
-- [ ] T017 [P] Initialize frontend React project with TypeScript, Vite, routing `frontend/src/`, `frontend/package.json`, `frontend/tsconfig.json` - React Router setup, i18n-js configuration, environment variables structure
+- [X] T009 Create data model documentation with PostgreSQL schema `data-model.md` - 7 entities (User, Doctor, Appointment, UrgencyAssessment, MedicineRequest, SickLeaveRequest, DoctorSchedule) with relationships, constraints, indexes
+- [X] T010 [P] Generate Auth API contract (OpenAPI) `contracts/auth.openapi.yaml` - POST /register (CURP validation), POST /login, POST /logout, POST /password-reset with request/response schemas
+- [X] T011 [P] Generate Appointments API contract (OpenAPI) `contracts/appointments.openapi.yaml` - GET/POST/PUT /appointments, filtering by date/doctor/specialty, history endpoint with schemas
+- [X] T012 [P] Generate Doctors API contract (OpenAPI) `contracts/doctors.openapi.yaml` - GET /doctors (directory), GET /doctors/:id (profile), GET /doctors/search (filter by specialty) with availability schemas
+- [X] T013 [P] Generate Triage API contract (OpenAPI) `contracts/triage.openapi.yaml` - POST /triage/assess with 5-question questionnaire, urgency classification response (LOW/MID/HIGH)
+- [X] T014 [P] Generate Requests API contract (OpenAPI) `contracts/requests.openapi.yaml` - POST/PUT medicine requests, POST/PUT sick leave requests with approval workflow schemas
+- [X] T015 Create quickstart guide for local development `quickstart.md` - Prerequisites (Node.js 18+, PostgreSQL 14+, npm), backend/frontend setup, test running, local workflow example
+- [X] T016 Initialize backend project structure with TypeScript, Express, PostgreSQL connection `backend/src/config/`, `backend/package.json`, `backend/tsconfig.json` - Database migrations setup, connection pooling configuration
+- [X] T017 [P] Initialize frontend React project with TypeScript, Vite, routing `frontend/src/`, `frontend/package.json`, `frontend/tsconfig.json` - React Router setup, i18n-js configuration, environment variables structure
 
 ---
 
@@ -70,18 +70,18 @@
 
 **Implementation Tasks**:
 
-- [ ] T018 [US1] Implement User model with CURP primary identifier `backend/src/models/User.ts` - Attributes: id, email, password_hash, CURP (18 alphanumeric), name, phone, assigned_doctor_id, created_at, updated_at
-- [ ] T019 [US1] Implement CURP validation utility (18-character format) `backend/src/utils/validation.ts` - Offline validation, error messages in Spanish, integration with registration form
-- [ ] T020 [US1] Implement AuthService with registration workflow `backend/src/services/AuthService.ts` - CURP format validation, email uniqueness check, password hashing (bcrypt), user creation, error handling in Spanish
-- [ ] T021 [US1] Implement JWT token generation and verification `backend/src/utils/jwt.ts` - Token lifecycle (expiry: 24h), secure signing, CURP claim, token refresh strategy
-- [ ] T022 [US1] Create auth API endpoints (register, login, logout, password-reset) `backend/src/api/routes/auth.routes.ts` - POST /register, POST /login, POST /logout, POST /password-reset; request validation, Spanish error messages
-- [ ] T023 [US1] Implement authentication middleware for protected routes `backend/src/api/middleware/auth.middleware.ts` - JWT verification, CURP extraction, request context setup; reusable across all protected endpoints
-- [ ] T024 [P] [US1] Create Register component with CURP field validation `frontend/src/components/Auth/Register.tsx` - Spanish form labels, email/password/CURP/phone fields, real-time CURP validation (18 chars), submit to /register endpoint
-- [ ] T025 [P] [US1] Create Login component with credential form `frontend/src/components/Auth/Login.tsx` - Spanish form labels, email and password fields, login to /login endpoint, token storage in localStorage, error message display
-- [ ] T026 [US1] Create useAuth custom hook for authentication state `frontend/src/hooks/useAuth.ts` - Token management, user context (CURP, email, name), logout function, protected route wrapper
-- [ ] T027 [US1] Implement registration integration test (email + CURP format validation) `backend/tests/integration/auth.integration.test.ts` - Register with valid CURP, verify error for invalid CURP, verify email uniqueness, confirm user creation in DB
-- [ ] T028 [US1] Implement login integration test with JWT token validation `backend/tests/integration/auth.integration.test.ts` - Login with correct credentials, verify JWT token returned, verify token invalid after logout, test incorrect password rejection
-- [ ] T029 [P] [US1] Create Cypress end-to-end test for registration → login → dashboard flow `frontend/tests/e2e/registration.cy.ts` - Register new account, verify confirmation, login with new credentials, verify dashboard access, verify logout redirects to login
+- [X] T018 [US1] Implement User model with CURP primary identifier `backend/src/models/User.ts` - Attributes: id, email, password_hash, CURP (18 alphanumeric), name, phone, assigned_doctor_id, created_at, updated_at
+- [X] T019 [US1] Implement CURP validation utility (18-character format) `backend/src/utils/validation.ts` - Offline validation, error messages in Spanish, integration with registration form
+- [X] T020 [US1] Implement AuthService with registration workflow `backend/src/services/AuthService.ts` - CURP format validation, email uniqueness check, password hashing (bcrypt), user creation, error handling in Spanish
+- [X] T021 [US1] Implement JWT token generation and verification `backend/src/utils/jwt.ts` - Token lifecycle (expiry: 24h), secure signing, CURP claim, token refresh strategy
+- [X] T022 [US1] Create auth API endpoints (register, login, logout, password-reset) `backend/src/api/routes/auth.routes.ts` - POST /register, POST /login, POST /logout, POST /password-reset; request validation, Spanish error messages
+- [X] T023 [US1] Implement authentication middleware for protected routes `backend/src/api/middleware/auth.middleware.ts` - JWT verification, CURP extraction, request context setup; reusable across all protected endpoints
+- [X] T024 [P] [US1] Create Register component with CURP field validation `frontend/src/components/Auth/Register.tsx` - Spanish form labels, email/password/CURP/phone fields, real-time CURP validation (18 chars), submit to /register endpoint
+- [X] T025 [P] [US1] Create Login component with credential form `frontend/src/components/Auth/Login.tsx` - Spanish form labels, email and password fields, login to /login endpoint, token storage in localStorage, error message display
+- [X] T026 [US1] Create useAuth custom hook for authentication state `frontend/src/hooks/useAuth.ts` - Token management, user context (CURP, email, name), logout function, protected route wrapper
+- [X] T027 [US1] Implement registration integration test (email + CURP format validation) `backend/tests/integration/auth.integration.test.ts` - Register with valid CURP, verify error for invalid CURP, verify email uniqueness, confirm user creation in DB
+- [X] T028 [US1] Implement login integration test with JWT token validation `backend/tests/integration/auth.integration.test.ts` - Login with correct credentials, verify JWT token returned, verify token invalid after logout, test incorrect password rejection
+- [X] T029 [P] [US1] Create Cypress end-to-end test for registration → login → dashboard flow `frontend/tests/e2e/registration.cy.ts` - Register new account, verify confirmation, login with new credentials, verify dashboard access, verify logout redirects to login
 
 ### User Story 2: Book Medical Appointments (P1)
 
@@ -91,19 +91,19 @@
 
 **Implementation Tasks**:
 
-- [ ] T030 [US2] Implement Appointment model with urgency level and status `backend/src/models/Appointment.ts` - Attributes: id, user_id FK, doctor_id FK, scheduled_at, urgency_level (enum: LOW/MID/HIGH), reason, status (enum: BOOKED/COMPLETED/CANCELLED), clinical_notes, created_at
-- [ ] T031 [US2] Implement DoctorSchedule model for slot availability `backend/src/models/DoctorSchedule.ts` - Attributes: id, doctor_id FK, date, available_slots (array), booked_slots (array), max_capacity; tracks doctor availability per day
-- [ ] T032 [P] [US2] Implement UrgencyAssessment model for triage responses `backend/src/models/UrgencyAssessment.ts` - Attributes: id, appointment_id FK, question_responses (JSON array of 5 answers), calculated_urgency (enum), timestamp; stores assessment data
-- [ ] T033 [US2] Implement TriageService with 5-question assessment algorithm `backend/src/services/TriageService.ts` - Evaluate responses to medical urgency questions, classify as LOW/MID/HIGH, store assessment, return classification; achieve 95% accuracy target per SC-003
-- [ ] T034 [P] [US2] Implement AppointmentService for booking and filtering `backend/src/services/AppointmentService.ts` - Create appointment, filter by date/doctor/specialty, check availability, prevent double-booking, generate unique reference number, persist to DB
-- [ ] T035 [US2] Implement SchedulingService for automatic assignment based on urgency `backend/src/services/SchedulingService.ts` - Assign slots based on urgency (High: 24h, Mid: 72h, Low: 1-2w), load balance across doctors, handle unavailability, return proposed appointment time
-- [ ] T036 [P] [US2] Create appointment API endpoints (list, create, filter, detail) `backend/src/api/routes/appointments.routes.ts` - GET /appointments (with filters), POST /appointments (create with triage), GET /appointments/:id, PUT /appointments/:id (cancel/reschedule)
-- [ ] T037 [P] [US2] Create BookAppointment component with doctor/date filtering `frontend/src/components/Appointments/BookAppointment.tsx` - Display available doctors and dates, filter by specialty/date range, select slot, show urgency assessment form, submit to POST /appointments endpoint
-- [ ] T038 [P] [US2] Create TriageQuestionnaire component with 5-question form `frontend/src/components/Triage/TriageQuestionnaire.tsx` - Display exactly 5 medical urgency questions in Spanish, capture responses (yes/no or severity scale), calculate urgency on submit, show urgency classification result
+- [X] T030 [US2] Implement Appointment model with urgency level and status `backend/src/models/Appointment.ts` - Attributes: id, user_id FK, doctor_id FK, scheduled_at, urgency_level (enum: LOW/MID/HIGH), reason, status (enum: BOOKED/COMPLETED/CANCELLED), clinical_notes, created_at
+- [X] T031 [US2] Implement DoctorSchedule model for slot availability `backend/src/models/DoctorSchedule.ts` - Attributes: id, doctor_id FK, date, available_slots (array), booked_slots (array), max_capacity; tracks doctor availability per day
+- [X] T032 [P] [US2] Implement UrgencyAssessment model for triage responses `backend/src/models/UrgencyAssessment.ts` - Attributes: id, appointment_id FK, question_responses (JSON array of 5 answers), calculated_urgency (enum), timestamp; stores assessment data
+- [X] T033 [US2] Implement TriageService with 5-question assessment algorithm `backend/src/services/TriageService.ts` - Evaluate responses to medical urgency questions, classify as LOW/MID/HIGH, store assessment, return classification; achieve 95% accuracy target per SC-003
+- [X] T034 [P] [US2] Implement AppointmentService for booking and filtering `backend/src/services/AppointmentService.ts` - Create appointment, filter by date/doctor/specialty, check availability, prevent double-booking, generate unique reference number, persist to DB
+- [X] T035 [US2] Implement SchedulingService for automatic assignment based on urgency `backend/src/services/SchedulingService.ts` - Assign slots based on urgency (High: 24h, Mid: 72h, Low: 1-2w), load balance across doctors, handle unavailability, return proposed appointment time
+- [X] T036 [P] [US2] Create appointment API endpoints (list, create, filter, detail) `backend/src/api/routes/appointments.routes.ts` - GET /appointments (with filters), POST /appointments (create with triage), GET /appointments/:id, PUT /appointments/:id (cancel/reschedule)
+- [X] T037 [P] [US2] Create BookAppointment component with doctor/date filtering `frontend/src/components/Appointments/BookAppointment.tsx` - Display available doctors and dates, filter by specialty/date range, select slot, show urgency assessment form, submit to POST /appointments endpoint
+- [X] T038 [P] [US2] Create TriageQuestionnaire component with 5-question form `frontend/src/components/Triage/TriageQuestionnaire.tsx` - Display exactly 5 medical urgency questions in Spanish, capture responses (yes/no or severity scale), calculate urgency on submit, show urgency classification result
 - [ ] T039 [US2] Implement appointment confirmation email service `backend/src/services/AppointmentService.ts` - Send Spanish-language confirmation email within 2 minutes of booking (SC-011), include appointment details, unique reference number, doctor info, instructions
-- [ ] T040 [US2] Create AppointmentList component showing booked appointments `frontend/src/components/Appointments/AppointmentList.tsx` - Display user's current/upcoming appointments, show date, doctor, urgency level, status; implement 3-minute booking flow achievement per SC-002
-- [ ] T041 [US2] Implement appointment booking integration test (slot selection + triage) `backend/tests/integration/appointments.integration.test.ts` - Create appointment with triage assessment, verify urgency classification stored, verify confirmation email triggered, verify slot no longer available (no double-booking)
-- [ ] T042 [P] [US2] Create Cypress test for appointment booking workflow `frontend/tests/e2e/appointment-booking.cy.ts` - Login, select doctor/date, complete triage (5 questions), receive urgency classification, confirm booking, verify appointment in list, verify reference number displayed
+- [X] T040 [US2] Create AppointmentList component showing booked appointments `frontend/src/components/Appointments/AppointmentList.tsx` - Display user's current/upcoming appointments, show date, doctor, urgency level, status; implement 3-minute booking flow achievement per SC-002
+- [X] T041 [US2] Implement appointment booking integration test (slot selection + triage) `backend/tests/integration/appointments.integration.test.ts` - Create appointment with triage assessment, verify urgency classification stored, verify confirmation email triggered, verify slot no longer available (no double-booking)
+- [X] T042 [P] [US2] Create Cypress test for appointment booking workflow `frontend/tests/e2e/appointment-booking.cy.ts` - Login, select doctor/date, complete triage (5 questions), receive urgency classification, confirm booking, verify appointment in list, verify reference number displayed
 
 ### User Story 3: View Doctor Information and Availability (P1)
 
@@ -113,14 +113,14 @@
 
 **Implementation Tasks**:
 
-- [ ] T043 [US3] Implement Doctor model with qualifications and ratings `backend/src/models/Doctor.ts` - Attributes: id, name, specialty, qualifications (array), years_experience, available_hours (JSON), current_patient_load, average_rating; doctor directory management
-- [ ] T044 [US3] Implement DoctorService for directory and availability queries `backend/src/services/DoctorService.ts` - Get all doctors, filter by specialty, check availability for date range, calculate response time, retrieve ratings; enable real-time availability display
-- [ ] T045 [P] [US3] Create doctor API endpoints (list, detail, search/filter) `backend/src/api/routes/doctors.routes.ts` - GET /doctors (directory), GET /doctors/:id (profile with availability), GET /doctors/search?specialty=X (filter); return availability data for booking flow
-- [ ] T046 [P] [US3] Create DoctorDirectory component showing all doctors `frontend/src/components/Doctors/DoctorDirectory.tsx` - Display doctor list with name, specialty, average rating, current availability status in Spanish; implement filtering UI
-- [ ] T047 [P] [US3] Create DoctorFilter component for specialty and availability filtering `frontend/src/components/Doctors/DoctorFilter.tsx` - Filter by specialty dropdown, filter by availability (today/this week/any date), real-time filter results, clear filters button
-- [ ] T048 [P] [US3] Create DoctorProfile component with qualifications and availability `frontend/src/components/Doctors/DoctorProfile.tsx` - Display doctor name, specialty, qualifications, years of experience, average rating, current week availability slots, "Book with this doctor" button
-- [ ] T049 [US3] Implement doctor directory integration test (filtering and detail) `backend/tests/integration/doctors.integration.test.ts` - Get all doctors, filter by specialty, verify doctor detail endpoint returns availability, verify ratings calculated correctly
-- [ ] T050 [P] [US3] Create Cypress test for doctor directory and filtering `frontend/tests/e2e/doctor-selection.cy.ts` - Access doctor directory, filter by specialty, view doctor profile, verify availability displayed, verify "Book with doctor" button functional
+- [X] T043 [US3] Implement Doctor model with qualifications and ratings `backend/src/models/Doctor.ts` - Attributes: id, name, specialty, qualifications (array), years_experience, available_hours (JSON), current_patient_load, average_rating; doctor directory management
+- [X] T044 [US3] Implement DoctorService for directory and availability queries `backend/src/services/DoctorService.ts` - Get all doctors, filter by specialty, check availability for date range, calculate response time, retrieve ratings; enable real-time availability display
+- [X] T045 [P] [US3] Create doctor API endpoints (list, detail, search/filter) `backend/src/api/routes/doctors.routes.ts` - GET /doctors (directory), GET /doctors/:id (profile with availability), GET /doctors/search?specialty=X (filter); return availability data for booking flow
+- [X] T046 [P] [US3] Create DoctorDirectory component showing all doctors `frontend/src/components/Doctors/DoctorDirectory.tsx` - Display doctor list with name, specialty, average rating, current availability status in Spanish; implement filtering UI
+- [X] T047 [P] [US3] Create DoctorFilter component for specialty and availability filtering `frontend/src/components/Doctors/DoctorFilter.tsx` - Filter by specialty dropdown, filter by availability (today/this week/any date), real-time filter results, clear filters button
+- [X] T048 [P] [US3] Create DoctorProfile component with qualifications and availability `frontend/src/components/Doctors/DoctorProfile.tsx` - Display doctor name, specialty, qualifications, years of experience, average rating, current week availability slots, "Book with this doctor" button
+- [X] T049 [US3] Implement doctor directory integration test (filtering and detail) `backend/tests/integration/doctors.integration.test.ts` - Get all doctors, filter by specialty, verify doctor detail endpoint returns availability, verify ratings calculated correctly
+- [X] T050 [P] [US3] Create Cypress test for doctor directory and filtering `frontend/tests/e2e/doctor-selection.cy.ts` - Access doctor directory, filter by specialty, view doctor profile, verify availability displayed, verify "Book with doctor" button functional
 
 ---
 
