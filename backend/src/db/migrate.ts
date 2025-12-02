@@ -18,6 +18,32 @@ const migrations = [
     down: `DROP TABLE IF EXISTS users;`,
   },
   {
+    version: '003',
+    name: 'make_doctor_nullable',
+    up: `
+      DO $$
+      BEGIN
+        IF EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'appointments' AND column_name = 'doctor_id' AND is_nullable = 'NO'
+        ) THEN
+          ALTER TABLE appointments ALTER COLUMN doctor_id DROP NOT NULL;
+        END IF;
+      END $$;
+    `,
+    down: `
+      DO $$
+      BEGIN
+        IF EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'appointments' AND column_name = 'doctor_id' AND is_nullable = 'YES'
+        ) THEN
+          ALTER TABLE appointments ALTER COLUMN doctor_id SET NOT NULL;
+        END IF;
+      END $$;
+    `,
+  },
+  {
     version: '002',
     name: 'create_doctors_appointments_tables',
     up: `

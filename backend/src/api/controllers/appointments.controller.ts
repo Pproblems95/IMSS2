@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { createAppointment as createAppt, listByUser, findById, cancelAppointment, createUrgencyAssessment } from '../../models/appointment';
+import { getOrCreateEmergencyPlaceholder } from '../../models/doctor';
 import { assessTriage } from '../../services/triage.service';
 import { EmergencyDispatchService } from '../../services/emergency.service';
 import { findAvailableSlot } from '../../services/scheduling.service';
@@ -31,9 +32,8 @@ export const createAppointment = async (req: Request, res: Response, next: NextF
       // Check for emergency conditions
       const emergencyCheck = EmergencyDispatchService.detectEmergency(triageAnswers);
       if (emergencyCheck.isEmergency) {
-        // Get a placeholder doctor ID or use empty for emergency
-        const emergencyDoctorId = 'emergency-unassigned';
-        
+        // For emergency appointments we ensure a valid placeholder doctor exists and assign its id
+        const emergencyDoctorId = await getOrCreateEmergencyPlaceholder();
         try {
           // Create appointment first for tracking
           const appt = await createAppt(userId, emergencyDoctorId, new Date().toISOString(), 'EMERGENCY', reason);
@@ -177,7 +177,7 @@ export const emergencyEscalate = async (req: Request, res: Response, next: NextF
     const escalation = await EmergencyDispatchService.createEscalation(
       appointmentId,
       userId,
-      appt.doctorId,
+      appt.doctorId ?? null,
       'PATIENT_REQUEST',
       notes || 'Escalación solicitada por el paciente',
       notes

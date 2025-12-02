@@ -3,7 +3,7 @@ import { query, getClient } from '../db/pool';
 export interface AppointmentRecord {
   id: string;
   userId: string;
-  doctorId: string;
+  doctorId?: string | null;
   scheduledAt: string;
   urgencyLevel: string;
   reason?: string;
@@ -21,46 +21,49 @@ function generateReferenceNumber(): string {
   return `APPT-${y}${m}${d}-${rand}`;
 }
 
-export async function createAppointment(userId: string, doctorId: string, scheduledAt: string, urgencyLevel = 'LOW', reason?: string) {
+export async function createAppointment(userId: string, doctorId: string | null, scheduledAt: string, urgencyLevel = 'LOW', reason?: string) {
   const client = await getClient();
   const referenceNumber = generateReferenceNumber();
 
   try {
     await client.query('BEGIN');
 
-    // prevent double-booking: check for exact slot on same doctor
-    const conflict = await client.query(
-      'SELECT id FROM appointments WHERE doctor_id = $1 AND scheduled_at = $2 AND status = $3 FOR UPDATE',
-      [doctorId, scheduledAt, 'BOOKED']
-    );
+    // prevent double-booking: check for exact slot on same doctor (skip if no doctor assigned)
+    if (doctorId) {
+      const conflict = await client.query(
+        'SELECT id FROM appointments WHERE doctor_id = $1 AND scheduled_at = $2 AND status = $3 FOR UPDATE',
+        [doctorId, scheduledAt, 'BOOKED']
+      );
 
-    if (conflict.rows.length > 0) {
-      await client.query('ROLLBACK');
-      throw new Error('Slot already booked');
+      if (conflict.rows.length > 0) {
+        await client.query('ROLLBACK');
+        throw new Error('Slot already booked');
+      }
     }
 
     const insert = await client.query(
       `INSERT INTO appointments (user_id, doctor_id, scheduled_at, urgency_level, reason, reference_number)
        VALUES ($1,$2,$3,$4,$5,$6)
        RETURNING id, user_id, doctor_id, scheduled_at, urgency_level, reason, status, reference_number, created_at`,
-      [userId, doctorId, scheduledAt, urgencyLevel, reason || null, referenceNumber]
+      [userId, doctorId || null, scheduledAt, urgencyLevel, reason || null, referenceNumber]
     );
 
     const row = insert.rows[0];
     const appointmentId = row.id;
 
-    // Mark slot as booked in doctor_schedules
-    const date = new Date(scheduledAt).toISOString().slice(0, 10);
-    const time = new Date(scheduledAt).toISOString().slice(11, 16); // HH:MM format
-    
-    // Add the booked slot to the doctor's schedule
-    const bookedSlot = JSON.stringify({ start: time, appointment_id: appointmentId });
-    await client.query(
-      `UPDATE doctor_schedules 
-       SET booked_slots = COALESCE(booked_slots, '[]'::jsonb) || ($1::jsonb)
-       WHERE doctor_id = $2 AND date = $3`,
-      [`[${bookedSlot}]`, doctorId, date]
-    );
+    // Mark slot as booked in doctor_schedules (only if doctor assigned)
+    if (doctorId) {
+      const date = new Date(scheduledAt).toISOString().slice(0, 10);
+      const time = new Date(scheduledAt).toISOString().slice(11, 16); // HH:MM format
+      // Add the booked slot to the doctor's schedule
+      const bookedSlot = JSON.stringify({ start: time, appointment_id: appointmentId });
+      await client.query(
+        `UPDATE doctor_schedules 
+         SET booked_slots = COALESCE(booked_slots, '[]'::jsonb) || ($1::jsonb)
+         WHERE doctor_id = $2 AND date = $3`,
+        [`[${bookedSlot}]`, doctorId, date]
+      );
+    }
 
     await client.query('COMMIT');
     return {
