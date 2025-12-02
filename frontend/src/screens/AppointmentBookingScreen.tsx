@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../contexts/AuthContext';
+import { EmergencyNotification, EmergencyNotificationData } from '../components/EmergencyNotification';
 import styles from './appointmentBooking.module.css';
 
 interface TriageQuestion {
@@ -26,6 +27,8 @@ interface BookingResult {
   doctorSpecialty: string;
   appointmentTime: string;
   appointmentId: string;
+  emergencyEscalation?: string;
+  escalationType?: string;
 }
 
 export const AppointmentBookingScreen: React.FC<{ onBack: () => void }> = ({ onBack }) => {
@@ -36,6 +39,7 @@ export const AppointmentBookingScreen: React.FC<{ onBack: () => void }> = ({ onB
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [bookingResult, setBookingResult] = useState<BookingResult | null>(null);
+  const [emergencyNotification, setEmergencyNotification] = useState<EmergencyNotificationData | null>(null);
 
   const handleTriageChange = (questionIndex: number, value: number) => {
     const newAnswers = [...triageAnswers];
@@ -67,39 +71,56 @@ export const AppointmentBookingScreen: React.FC<{ onBack: () => void }> = ({ onB
       }
 
       const data = await response.json();
-      setSuccess(true);
       
-      // Parse the appointment time safely
-      let formattedTime = 'Fecha no disponible';
-      try {
-        if (data.appointmentTime) {
-          // Handle ISO string or timestamp
-          const dateObj = new Date(data.appointmentTime);
-          if (!isNaN(dateObj.getTime())) {
-            formattedTime = dateObj.toLocaleString('es-ES', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            });
+      // Check if this is an emergency escalation
+      if (data.urgencyLevel === 'EMERGENCY' || data.emergencyEscalation) {
+        setEmergencyNotification({
+          appointmentId: data.id,
+          escalationId: data.emergencyEscalation || data.id,
+          escalationType: data.escalationType || 'CRITICAL_CONDITION',
+          message: data.message || '¡EMERGENCIA! Se ha activado el protocolo de escalación. Ayuda en camino.',
+          timestamp: new Date(),
+        });
+        
+        // Keep showing emergency notification for longer
+        setTimeout(() => {
+          onBack();
+        }, 5000);
+      } else {
+        setSuccess(true);
+        
+        // Parse the appointment time safely
+        let formattedTime = 'Fecha no disponible';
+        try {
+          if (data.appointmentTime) {
+            // Handle ISO string or timestamp
+            const dateObj = new Date(data.appointmentTime);
+            if (!isNaN(dateObj.getTime())) {
+              formattedTime = dateObj.toLocaleString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+            }
           }
+        } catch (e) {
+          console.error('Date parsing error:', e);
         }
-      } catch (e) {
-        console.error('Date parsing error:', e);
-      }
-      
-      setBookingResult({
-        urgencyLevel: data.urgencyLevel || 'LOW',
-        doctorName: data.doctorName || 'Doctor Asignado',
-        doctorSpecialty: data.doctorSpecialty || 'Especialidad',
-        appointmentTime: formattedTime,
-        appointmentId: data.id,
-      });
+        
+        setBookingResult({
+          urgencyLevel: data.urgencyLevel || 'LOW',
+          doctorName: data.doctorName || 'Doctor Asignado',
+          doctorSpecialty: data.doctorSpecialty || 'Especialidad',
+          appointmentTime: formattedTime,
+          appointmentId: data.id,
+        });
 
-      setTimeout(() => {
-        onBack();
-      }, 3000);
+        setTimeout(() => {
+          onBack();
+        }, 3000);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -151,6 +172,11 @@ export const AppointmentBookingScreen: React.FC<{ onBack: () => void }> = ({ onB
 
   return (
     <div className={styles.container}>
+      <EmergencyNotification 
+        data={emergencyNotification || undefined}
+        onDismiss={() => setEmergencyNotification(null)}
+      />
+      
       <button className={styles.backButton} onClick={onBack}>
         <ArrowLeftIcon width={20} height={20} />
         Volver

@@ -268,4 +268,134 @@ describe('Appointments Integration Tests (Triage + Auto-Assignment)', () => {
       expect(res.status).toBe(403);
     });
   });
+
+  describe('POST /api/appointments/:id/emergency-escalate', () => {
+    test('should escalate appointment to emergency', async () => {
+      if (!dbAvailable || !accessToken) return;
+
+      // Create a normal appointment first
+      const createRes = await request(app)
+        .post('/api/appointments')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          triageAnswers: [1, 0, 0, 0, 0],
+          specialty: 'general',
+          reason: 'Test',
+        });
+
+      const appointmentId = createRes.body.id || createRes.body.appointment?.id;
+
+      // Escalate to emergency
+      const res = await request(app)
+        .post(`/api/appointments/${appointmentId}/emergency-escalate`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          notes: 'Patient condition worsened',
+        });
+
+      expect(res.status).toBe(202);
+      expect(res.body.escalationId).toBeDefined();
+      expect(res.body.dispatchReference).toBeDefined();
+      expect(res.body.message).toContain('escalación');
+    });
+
+    test('should reject escalation without appointment ID', async () => {
+      if (!dbAvailable || !accessToken) return;
+
+      const res = await request(app)
+        .post('/api/appointments/invalid-id/emergency-escalate')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          notes: 'Test escalation',
+        });
+
+      expect(res.status).toBe(404);
+    });
+
+    test('should reject duplicate escalations', async () => {
+      if (!dbAvailable || !accessToken) return;
+
+      // Create an appointment
+      const createRes = await request(app)
+        .post('/api/appointments')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          triageAnswers: [1, 0, 0, 0, 0],
+          specialty: 'general',
+          reason: 'Test',
+        });
+
+      const appointmentId = createRes.body.id || createRes.body.appointment?.id;
+
+      // First escalation
+      await request(app)
+        .post(`/api/appointments/${appointmentId}/emergency-escalate`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ notes: 'First escalation' });
+
+      // Try second escalation
+      const res = await request(app)
+        .post(`/api/appointments/${appointmentId}/emergency-escalate`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ notes: 'Second escalation' });
+
+      expect(res.status).toBe(409);
+      expect(res.body.message).toContain('escalación activa');
+    });
+
+    test('should detect emergency during appointment creation', async () => {
+      if (!dbAvailable || !accessToken) return;
+
+      // Create appointment with chest pain emergency (Q0=3)
+      const res = await request(app)
+        .post('/api/appointments')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          triageAnswers: [3, 0, 0, 0, 0], // Q0=3 = chest pain
+          specialty: 'general',
+          reason: 'Severe chest pain',
+        });
+
+      expect(res.status).toBe(201);
+      expect(res.body.urgencyLevel).toBe('EMERGENCY');
+      expect(res.body.emergencyEscalation).toBeDefined();
+      expect(res.body.escalationType).toBe('CHEST_PAIN');
+    });
+
+    test('should detect trauma emergency', async () => {
+      if (!dbAvailable || !accessToken) return;
+
+      // Create appointment with trauma emergency (Q3=1 + Q1>=2)
+      const res = await request(app)
+        .post('/api/appointments')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          triageAnswers: [0, 2, 0, 1, 0], // Q1=2 (moderate), Q3=1 (trauma)
+          specialty: 'general',
+          reason: 'Motor vehicle accident',
+        });
+
+      expect(res.status).toBe(201);
+      expect(res.body.urgencyLevel).toBe('EMERGENCY');
+      expect(res.body.escalationType).toBe('TRAUMA');
+    });
+
+    test('should not create emergency for non-emergency symptoms', async () => {
+      if (!dbAvailable || !accessToken) return;
+
+      // Create appointment with low urgency (no emergency indicators)
+      const res = await request(app)
+        .post('/api/appointments')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          triageAnswers: [0, 0, 0, 0, 0], // All low
+          specialty: 'general',
+          reason: 'Routine checkup',
+        });
+
+      expect(res.status).toBe(201);
+      expect(res.body.urgencyLevel).toBe('LOW');
+      expect(res.body.emergencyEscalation).toBeUndefined();
+    });
+  });
 });

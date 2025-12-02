@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { createAppointment as createAppt, listByUser, findById, cancelAppointment, createUrgencyAssessment } from '../../models/appointment';
 import { assessTriage } from '../../services/triage.service';
+import { EmergencyDispatchService } from '../../services/emergency.service';
 import { findAvailableSlot } from '../../services/scheduling.service';
 
 export const listAppointments = async (req: Request, res: Response, next: NextFunction) => {
@@ -26,6 +27,42 @@ export const createAppointment = async (req: Request, res: Response, next: NextF
     // If triage answers provided, run triage and auto-assign slot using specialty
     if (Array.isArray(triageAnswers) && specialty) {
       const triage = assessTriage(triageAnswers);
+
+      // Check for emergency conditions
+      const emergencyCheck = EmergencyDispatchService.detectEmergency(triageAnswers);
+      if (emergencyCheck.isEmergency) {
+        // Get a placeholder doctor ID or use empty for emergency
+        const emergencyDoctorId = 'emergency-unassigned';
+        
+        // Create appointment first for tracking
+        const appt = await createAppt(userId, emergencyDoctorId, new Date().toISOString(), 'EMERGENCY', reason);
+        await createUrgencyAssessment(appt.id, triageAnswers, triage.score, 'EMERGENCY', true);
+
+        // Create escalation record
+        const escalation = await EmergencyDispatchService.createEscalation(
+          appt.id,
+          userId,
+          null as any,
+          emergencyCheck.escalationType || 'CRITICAL_CONDITION',
+          emergencyCheck.reason || reason,
+          `Triaged through appointment form with answers: ${JSON.stringify(triageAnswers)}`
+        );
+
+        // Notify on-call physician (should complete within <1 minute SLA)
+        await EmergencyDispatchService.notifyOnCall(escalation.id);
+
+        // Initiate 911 dispatch
+        await EmergencyDispatchService.initiate911Dispatch(escalation.id, 'Unknown'); // TODO: Get user location
+
+        return res.status(201).json({
+          id: appt.id,
+          urgencyLevel: 'EMERGENCY',
+          emergencyEscalation: escalation.id,
+          escalationType: escalation.escalationType,
+          message: '¡EMERGENCIA! Se ha activado el protocolo de escalación. Ayuda en camino.',
+          triageAnswers,
+        });
+      }
 
       // determine search window based on urgency
       let withinHours = 24; // HIGH
@@ -92,12 +129,55 @@ export const getAppointment = async (req: Request, res: Response, next: NextFunc
 
 export const emergencyEscalate = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // For now: accept escalation request and log it; real integration is T050-series
-    // Payload: { appointmentId, notes }
-    const { appointmentId } = req.body;
-    // TODO: create audit record, notify on-call team, integrate with DispatchService
-    console.log('Emergency escalate requested for', appointmentId || '(no id)');
-    res.status(202).json({ message: 'Escalación registrada' });
+    const user = (req as any).user;
+    if (!user) return res.status(401).json({ message: 'No autorizado' });
+
+    const { appointmentId, notes } = req.body;
+    if (!appointmentId) {
+      return res.status(400).json({ message: 'appointmentId es requerido' });
+    }
+
+    // Verify appointment exists and belongs to user
+    const appt = await findById(appointmentId);
+    if (!appt) {
+      return res.status(404).json({ message: 'Cita no encontrada' });
+    }
+
+    const userId = user.sub || user.id;
+    if (appt.userId !== userId) {
+      return res.status(403).json({ message: 'Acceso denegado' });
+    }
+
+    // Check if escalation already exists
+    const existing = await EmergencyDispatchService.getEscalationByAppointment(appointmentId);
+    if (existing && existing.status !== 'RESOLVED') {
+      return res.status(409).json({
+        message: 'Esta cita ya tiene una escalación activa',
+        escalationId: existing.id,
+      });
+    }
+
+    // Create emergency escalation record
+    const escalation = await EmergencyDispatchService.createEscalation(
+      appointmentId,
+      userId,
+      appt.doctorId,
+      'PATIENT_REQUEST',
+      notes || 'Escalación solicitada por el paciente',
+      notes
+    );
+
+    // Notify on-call physician
+    await EmergencyDispatchService.notifyOnCall(escalation.id);
+
+    // Initiate dispatch
+    await EmergencyDispatchService.initiate911Dispatch(escalation.id);
+
+    res.status(202).json({
+      message: 'Escalación registrada y ayuda en camino',
+      escalationId: escalation.id,
+      dispatchReference: escalation.dispatchReference,
+    });
   } catch (err) {
     next(err);
   }

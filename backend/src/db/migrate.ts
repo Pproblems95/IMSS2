@@ -84,8 +84,36 @@ const migrations = [
         emergency_flag BOOLEAN DEFAULT FALSE,
         created_at timestamptz DEFAULT now()
       );
+
+      DO $$
+      BEGIN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'escalation_status') THEN
+          CREATE TYPE escalation_status AS ENUM ('PENDING', 'NOTIFIED', 'DISPATCHED', 'RESOLVED');
+        END IF;
+      END $$;
+
+      CREATE TABLE IF NOT EXISTS emergency_escalations (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        appointment_id UUID NOT NULL REFERENCES appointments(id) ON DELETE CASCADE,
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        doctor_id UUID REFERENCES doctors(id) ON DELETE SET NULL,
+        escalation_type TEXT NOT NULL,
+        reason TEXT NOT NULL,
+        status escalation_status NOT NULL DEFAULT 'PENDING',
+        on_call_notified_at timestamptz,
+        dispatch_initiated_at timestamptz,
+        dispatch_reference TEXT,
+        notes TEXT,
+        created_at timestamptz DEFAULT now(),
+        updated_at timestamptz DEFAULT now()
+      );
+      CREATE INDEX IF NOT EXISTS idx_emergency_escalations_appointment ON emergency_escalations (appointment_id);
+      CREATE INDEX IF NOT EXISTS idx_emergency_escalations_user ON emergency_escalations (user_id);
+      CREATE INDEX IF NOT EXISTS idx_emergency_escalations_status ON emergency_escalations (status);
     `,
     down: `
+      DROP TABLE IF EXISTS emergency_escalations;
+      DROP TYPE IF EXISTS escalation_status;
       DROP TABLE IF EXISTS urgency_assessments;
       DROP TABLE IF EXISTS appointments;
       DROP TABLE IF EXISTS doctor_schedules;

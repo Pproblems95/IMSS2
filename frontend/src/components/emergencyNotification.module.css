@@ -1,0 +1,184 @@
+.emergencyNotification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border: 3px solid #8b1e23;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(220, 53, 69, 0.4);
+  color: white;
+  z-index: 9999;
+  max-width: 500px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(600px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 10px 40px rgba(220, 53, 69, 0.4);
+  }
+  50% {
+    box-shadow: 0 10px 60px rgba(220, 53, 69, 0.8), 0 0 20px rgba(220, 53, 69, 0.6);
+  }
+}
+
+.emergencyNotification.pulse {
+  animation: slideIn 0.3s ease-out, pulse 0.6s ease-in-out infinite;
+}
+
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  animation: iconBounce 0.6s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.textContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.message {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: 0.95;
+}
+
+.details {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.closeButton {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.actionBar {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.callButton,
+.viewButton {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.callButton {
+  background: #fff;
+  color: #dc3545;
+}
+
+.callButton:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.viewButton {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.viewButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .emergencyNotification {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  .content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .icon {
+    font-size: 28px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .message {
+    font-size: 13px;
+  }
+
+  .actionBar {
+    flex-direction: column;
+  }
+
+  .callButton,
+  .viewButton {
+    font-size: 11px;
+    padding: 8px 10px;
+  }
+}
