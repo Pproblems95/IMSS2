@@ -67,7 +67,8 @@ export const AppointmentBookingScreen: React.FC<{ onBack: () => void }> = ({ onB
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to book appointment');
+        const errorMsg = data.message || data.error || 'Failed to book appointment';
+        throw new Error(errorMsg);
       }
 
       const data = await response.json();
@@ -122,7 +123,9 @@ export const AppointmentBookingScreen: React.FC<{ onBack: () => void }> = ({ onB
         }, 3000);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      console.error('Appointment booking error:', errorMessage);
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
