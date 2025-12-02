@@ -134,12 +134,12 @@
 
 **Implementation Tasks**:
 
-- [ ] T050A [Emergency] Implement emergency case detection in TriageService `backend/src/services/TriageService.ts` - Identify emergency-level symptoms (trauma indicators, chest pain, difficulty breathing), flag appointments as EMERGENCY urgency level (beyond HIGH)
-- [ ] T050B [Emergency] Create emergency escalation API endpoint `backend/src/api/routes/appointments.routes.ts` - POST /appointments/emergency-escalate, route to on-call team notification system, log emergency event with timestamp and patient info (CURP masked)
-- [ ] T050C [Emergency] Implement on-call physician notification service `backend/src/services/OnCallService.ts` - Send emergency notification to on-call physician within 1 minute, include patient urgency level, symptoms summary, callback phone number
-- [ ] T050D [Emergency] Create 911 dispatch integration stub `backend/src/services/DispatchService.ts` - Prepare for 911 system integration (Phase 3); for MVP, logs emergency events with recommended dispatch information; includes patient location and urgency details
-- [ ] T050E [Emergency] Implement emergency escalation integration test `backend/tests/integration/emergency.integration.test.ts` - Test emergency case detection, verify escalation endpoint triggers notification, verify audit trail logging
-- [ ] T050F [P] [Emergency] Create emergency case UI notification `frontend/src/components/Common/EmergencyNotification.tsx` - Display emergency escalation status to patient, show "Emergency Response Team Notified" message in Spanish, provide callback timeline
+- [X] T050A [Emergency] Implement emergency case detection in TriageService `backend/src/services/TriageService.ts` - Identify emergency-level symptoms (trauma indicators, chest pain, difficulty breathing), flag appointments as EMERGENCY urgency level (beyond HIGH)
+- [X] T050B [Emergency] Create emergency escalation API endpoint `backend/src/api/routes/appointments.routes.ts` - POST /appointments/emergency-escalate, route to on-call team notification system, log emergency event with timestamp and patient info (CURP masked)
+- [X] T050C [Emergency] Implement on-call physician notification service `backend/src/services/OnCallService.ts` - Send emergency notification to on-call physician within 1 minute, include patient urgency level, symptoms summary, callback phone number
+- [X] T050D [Emergency] Create 911 dispatch integration stub `backend/src/services/DispatchService.ts` - Prepare for 911 system integration (Phase 3); for MVP, logs emergency events with recommended dispatch information; includes patient location and urgency details
+- [X] T050E [Emergency] Implement emergency escalation integration test `backend/tests/integration/emergency.integration.test.ts` - Test emergency case detection, verify escalation endpoint triggers notification, verify audit trail logging
+- [X] T050F [P] [Emergency] Create emergency case UI notification `frontend/src/components/Common/EmergencyNotification.tsx` - Display emergency escalation status to patient, show "Emergency Response Team Notified" message in Spanish, provide callback timeline
 
 ---
 
