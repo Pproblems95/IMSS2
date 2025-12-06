@@ -6,7 +6,7 @@
 }
 
 .header {
-  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  background: #127a38;
   color: white;
   padding: 24px 32px;
   display: flex;
@@ -48,7 +48,7 @@
 }
 
 .welcomeSection h2 {
-  color: #27ae60;
+  color: #127a38;
   margin: 0 0 12px 0;
   font-size: 24px;
 }
@@ -85,7 +85,7 @@
   left: 0;
   height: 4px;
   width: 100%;
-  background: linear-gradient(90deg, #27ae60 0%, #229954 100%);
+  background: #127a38;
 }
 
 .menuCard:hover {
