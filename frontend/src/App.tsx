@@ -29,7 +29,7 @@ const AppContent: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        background: '#127a38',
+        background: '#00584E',
       }}>
         <div style={{
           textAlign: 'center',

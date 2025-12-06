@@ -9,7 +9,7 @@
 .backButton {
   background: none;
   border: none;
-  color: #127a38;
+  color: #00584E;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -37,7 +37,7 @@
 }
 
 .form h2 {
-  color: #127a38;
+  color: #00584E;
   margin: 0 0 8px 0;
   font-size: 28px;
 }
@@ -99,14 +99,14 @@
 }
 
 .answerButton:hover {
-  border-color: #127a38;
-  color: #127a38;
+  border-color: #00584E;
+  color: #00584E;
 }
 
 .answerButton.selected {
-  background: #127a38;
+  background: #00584E;
   color: white;
-  border-color: #127a38;
+  border-color: #00584E;
 }
 
 .formLabel {
@@ -131,13 +131,13 @@
 
 .select:focus {
   outline: none;
-  border-color: #127a38;
+  border-color: #00584E;
 }
 
 .submitButton {
   width: 100%;
   padding: 14px;
-  background: #127a38;
+  background: #00584E;
   color: white;
   border: none;
   border-radius: 8px;
@@ -200,12 +200,12 @@
   width: 100%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 3px 10px rgba(0, 0, 0, 0.08);
   text-align: center;
-  border-top: 4px solid #127a38;
+  border-top: 4px solid #00584E;
 }
 
 .successIcon {
   font-size: 64px;
-  color: #127a38;
+  color: #00584E;
   margin-bottom: 16px;
   animation: scaleIn 0.3s ease-out;
 }
@@ -221,7 +221,7 @@
 }
 
 .successCard h2 {
-  color: #127a38;
+  color: #00584E;
   margin: 0 0 24px 0;
   font-size: 24px;
 }
@@ -262,7 +262,7 @@
 
 .urgency-low {
   background: #d5f4e6;
-  color: #127a38;
+  color: #00584E;
 }
 
 .urgency-mid {
